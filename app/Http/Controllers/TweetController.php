@@ -88,23 +88,12 @@ class TweetController extends Controller
      */
     public function destroy(Tweet $tweet)
     {
-        if($tweet)
-        {
+
             $tweet->delete();
             $response = [
-                'success' => true,
-                'message' => 'Tweet deleted successfully.'
+                'message' =>  trans('messages.deletedsuccessfully')
             ];
             return response()->json($response, 200);
-        }
-        // else
-        // {
-        //     $response = [
-        //         'success' => false,
-        //         'message' => 'Tweet not found.'
-        //     ];
-        //     return response()->json($response, 404);
-        // }
         
     }
 }

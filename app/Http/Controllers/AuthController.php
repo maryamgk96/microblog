@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\User;
 use App\Http\Requests\StoreUserRequest;
-
+use App;
 class AuthController extends Controller
 {
     
@@ -17,15 +17,7 @@ class AuthController extends Controller
      */
     public function register(StoreUserRequest $request)
     {
-        // $validated = $request->validated();
-        // if ($validator->fails()) {
-        //     $response = [
-        //         'success' => false,
-        //         'data' => 'Validation Error.',
-        //         'message' => $validator->errors()
-        //     ];
-        //     return response()->json($response, 404);
-        // }
+
         $avatarName ='avatar_'.time().'.'.request()->image->getClientOriginalExtension();
         $request->image->storeAs('avatars',$avatarName);
         $user = User::create([
@@ -35,9 +27,7 @@ class AuthController extends Controller
             'image' => $avatarName
         ]);
  
-        $token = $user->createToken('Token')->accessToken;
- 
-        return response()->json(['token' => $token], 200);
+        return $user->respondWithToken();
     }
     /**
      * Handles Login Request
@@ -53,10 +43,9 @@ class AuthController extends Controller
         ];
  
         if (auth()->attempt($credentials)) {
-            $token = auth()->user()->createToken('Token')->accessToken;
-            return response()->json(['token' => $token], 200);
+            return auth()->user()->respondWithToken();
         } else {
-            return response()->json(['error' => 'UnAuthorised'], 401);
+            return response()->json(['error' => trans('messages.unauthorised')], 401);
         }
     }
 }

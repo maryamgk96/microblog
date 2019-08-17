@@ -16,10 +16,10 @@ class FollowUser extends Controller
      */
     public function __invoke(Request $request)
     {
+        $user = User::findOrFail($request->user_id);
         Auth::user()->following()->attach([$request->user_id]);
         $response = [
-            'success' => true,
-            'message' => 'you followed user successfully.'
+            'message' => trans('messages.followedsuccessfully')
         ];
         return response()->json($response, 200);
     }

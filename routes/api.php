@@ -15,7 +15,8 @@ use Illuminate\Http\Request;
 
 Route::post('login', 'AuthController@login');
 Route::post('register', 'AuthController@register');
-Route::middleware('auth:api')->group( function () {
+
+Route::middleware(['auth:api','localization:api'])->group( function () {
 Route::apiResource('tweets', 'TweetController');
 Route::post('followuser', 'FollowUser');
 Route::get('timeline', 'UserTimeline');

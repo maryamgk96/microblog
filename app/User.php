@@ -50,7 +50,11 @@ class User extends Authenticatable
     {
      return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'user_id')->withTimestamps();
     }
-
+    /**
+     * Handles user's timeline
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function timeline()
     {
         $following = $this->following()->with(['tweets' => function ($query) {
@@ -64,5 +68,16 @@ class User extends Authenticatable
         });
       
         return TweetResource::collection(collect($sorted->values()->all()));
+    }
+    /**
+     * Creats json response with generated access token
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function respondWithToken()
+    {
+      return response()->json([
+        'token_type' => 'Bearer',
+        'access_token' => $this->createToken('Token')->accessToken,
+      ],200);
     }
 }
