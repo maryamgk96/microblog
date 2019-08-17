@@ -19,7 +19,7 @@ class TweetResource extends JsonResource
             'id' => $this->id,
             'body' => $this->body,
             'created_at' => (string) $this->created_at,
-            'user' => $this->user,
+            'user' => $this->user->name,
         ];
     }
 }

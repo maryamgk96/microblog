@@ -7,6 +7,7 @@ use App\Http\Requests\StoreTweetRequest;
 use App\Http\Resources\TweetResource;
 use App\User;
 use App\Tweet;
+use Auth;
 
 class TweetController extends Controller
 {
@@ -40,7 +41,7 @@ class TweetController extends Controller
     {
         $tweet = Tweet::create([
             'body' => $request->body,
-            'user_id' =>auth()->guard('api')->user()->id
+            'user_id' =>Auth::user()->id
         ]);
         return new TweetResource($tweet);
     }

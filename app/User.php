@@ -6,7 +6,9 @@ use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Laravel\Passport\HasApiTokens;
+use App\Http\Resources\TweetResource;
 use App\Tweet;
+use App\User;
 
 class User extends Authenticatable
 {
@@ -42,5 +44,25 @@ class User extends Authenticatable
     public function tweets()
     {
       return $this->hasMany(Tweet::class);
+    }
+
+    public function following()
+    {
+     return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'user_id')->withTimestamps();
+    }
+
+    public function timeline()
+    {
+        $following = $this->following()->with(['tweets' => function ($query) {
+            $query->orderBy('created_at', 'desc')->paginate(10);
+        }])->get();
+        $timeline = $following->flatMap(function ($values) {
+            return $values->tweets;
+        });
+        $sorted = $timeline->sortByDesc(function ($tweet) {
+            return $tweet->created_at;
+        });
+      
+        return TweetResource::collection(collect($sorted->values()->all()));
     }
 }

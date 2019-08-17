@@ -26,7 +26,7 @@ class AuthController extends Controller
         //     ];
         //     return response()->json($response, 404);
         // }
-        $avatarName ='avatar_'.time();
+        $avatarName ='avatar_'.time().'.'.request()->image->getClientOriginalExtension();
         $request->image->storeAs('avatars',$avatarName);
         $user = User::create([
             'name' => $request->name,
