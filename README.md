@@ -20,6 +20,8 @@ Setup the project:
 Headers:
 1) All apis:
 
+       ‘X-localization’ => ‘ar’ or ‘en’
+
        'Accept' => 'application/json'
 
 2) Api that needs authentication:
