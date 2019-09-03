@@ -18,15 +18,7 @@ class AuthController extends Controller
     public function register(StoreUserRequest $request)
     {
 
-        $avatarName ='avatar_'.time().'.'.request()->image->getClientOriginalExtension();
-        $request->image->storeAs('avatars',$avatarName);
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => bcrypt($request->password),
-            'image' => $avatarName
-        ]);
- 
+        $user = User::register($request);
         return $user->respondWithToken();
     }
     /**

@@ -39,10 +39,7 @@ class TweetController extends Controller
      */
     public function store(StoreTweetRequest $request)
     {
-        $tweet = Tweet::create([
-            'body' => $request->body,
-            'user_id' =>Auth::user()->id
-        ]);
+        $tweet = Tweet::createTweet($request->body);
         return new TweetResource($tweet);
     }
 
@@ -90,10 +87,7 @@ class TweetController extends Controller
     {
 
             $tweet->delete();
-            $response = [
-                'message' =>  trans('messages.deletedsuccessfully')
-            ];
-            return response()->json($response, 200);
+            return response(null,204);
         
     }
 }

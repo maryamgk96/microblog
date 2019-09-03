@@ -4,6 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 use App\User;
+use Auth;
 
 class Tweet extends Model
 {
@@ -20,5 +21,14 @@ class Tweet extends Model
     public function user()
     {
       return $this->belongsTo(User::class);
+    }
+
+    static function createTweet($body)
+    {
+      $tweet = Tweet::create([
+        'body' => $body,
+        'user_id' =>Auth::user()->id
+      ]);
+      return $tweet;
     }
 }

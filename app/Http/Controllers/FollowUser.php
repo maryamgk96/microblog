@@ -14,10 +14,10 @@ class FollowUser extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function __invoke(Request $request)
+    public function followUser(Request $request)
     {
-        $user = User::findOrFail($request->user_id);
-        Auth::user()->following()->attach([$request->user_id]);
+        
+        Auth::user()->followUser($request->user_id);
         $response = [
             'message' => trans('messages.followedsuccessfully')
         ];

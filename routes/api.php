@@ -18,9 +18,10 @@ Route::post('register', 'AuthController@register');
 
 Route::middleware(['auth:api','localization:api'])->group( function () {
 Route::apiResource('tweets', 'TweetController');
-Route::post('followuser', 'FollowUser');
-Route::get('timeline', 'UserTimeline');
-});
-Route::middleware('auth:api')->get('/user', function (Request $request) {
+Route::post('followuser', 'FollowUser@followUser');
+Route::get('timeline', 'UserTimeline@index');
+Route::get('/user', function (Request $request) {
     return $request->user();
 });
+});
+

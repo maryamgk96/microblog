@@ -51,6 +51,23 @@ class User extends Authenticatable
      return $this->belongsToMany(User::class, 'user_followers', 'follower_id', 'user_id')->withTimestamps();
     }
     /**
+     * Handles user creation
+     *
+     * @return User object
+     */
+    static function register($request)
+    {
+        $avatarName ='avatar_'.time().'.'.request()->image->getClientOriginalExtension();
+        $request->image->storeAs('avatars',$avatarName);
+        $user = User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'image' => $avatarName
+        ]);
+        return $user;
+    }
+    /**
      * Handles user's timeline
      *
      * @return \Illuminate\Http\JsonResponse
@@ -79,5 +96,11 @@ class User extends Authenticatable
         'token_type' => 'Bearer',
         'access_token' => $this->createToken('Token')->accessToken,
       ],200);
+    }
+
+    public function followUser($id)
+    {
+        User::findOrFail($id);
+        $this->following()->attach([$id]);
     }
 }
